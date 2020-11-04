@@ -1,8 +1,12 @@
 import $ from '../core';
 
-$.prototype.setAttr = function(name, value = '') {
+$.prototype.attr = function(name, value = null) {
     for (let i = 0; i < this.length; i++) {
-        this[i].setAttribute(name, value);
+        if (value || value === '') {
+            this[i].setAttribute(name, value);
+        } else {
+            return this[i].getAttribute(name);
+        }
     }
     return this;
 }; 
