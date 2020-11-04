@@ -30,3 +30,28 @@ $('.wrap').html(
 );
 
 $('.dropdown-toggle').dropdown();
+
+$('#trigger').click(() => $('#trigger').createModal({
+    text: {
+        title: 'Modal title',
+        body: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Cupiditate sit est nostrum nihil earum aperiam? Vitae sunt dicta, delectus quasi perspiciatis modi eius autem a qui architecto incidunt eum repudiandae!'
+    }, 
+    btns: {
+        count: 2,
+        settings: [
+            [
+                'Close',
+                ['btn-danger', 'mr-10'],
+                true
+            ],
+            [
+                'Save changes',
+                ['btn-success'],
+                false,
+                () => {
+                    alert('Данные сохранены');
+                }
+            ]
+        ]
+    }
+}));
