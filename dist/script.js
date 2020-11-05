@@ -1867,6 +1867,45 @@ module.exports = g;
 
 /***/ }),
 
+/***/ "./src/js/lib/components/accordion.js":
+/*!********************************************!*\
+  !*** ./src/js/lib/components/accordion.js ***!
+  \********************************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../core */ "./src/js/lib/core.js");
+
+
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.accordion = function (headActiveClass = 'accordion-head--active', contentActiveClass = 'accordion-content--active', paddings = 40) {
+  for (let i = 0; i < this.length; i++) {
+    const contentBlock = this[i].nextElementSibling;
+    Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])(this[i]).on('click', () => {
+      Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])(this[i]).toggleClass(headActiveClass);
+      Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])(contentBlock).toggleClass(contentActiveClass);
+
+      if (Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])(this[i]).hasClass(headActiveClass)) {
+        contentBlock.style.maxHeight = contentBlock.scrollHeight + paddings + 'px';
+        contentBlock.style.opacity = 1;
+      } else {
+        contentBlock.style.maxHeight = 0;
+        contentBlock.style.opacity = 0;
+      }
+    });
+    Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])(contentBlock).on('click', () => {
+      contentBlock.style.maxHeight = 0;
+      contentBlock.style.opacity = 0;
+      Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])(this[i]).toggleClass(headActiveClass);
+    });
+  }
+};
+
+Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])('.accordion-head').accordion();
+
+/***/ }),
+
 /***/ "./src/js/lib/components/dropdown.js":
 /*!*******************************************!*\
   !*** ./src/js/lib/components/dropdown.js ***!
@@ -1906,30 +1945,44 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../core */ "./src/js/lib/core.js");
 
 
+const scrollWidth = calcScrollWidth();
 
-_core__WEBPACK_IMPORTED_MODULE_1__["default"].prototype.modal = function () {
+_core__WEBPACK_IMPORTED_MODULE_1__["default"].prototype.modal = function (createdByScript) {
   for (let i = 0; i < this.length; i++) {
     const target = Object(_core__WEBPACK_IMPORTED_MODULE_1__["default"])(this[i]).attr('data-target');
     Object(_core__WEBPACK_IMPORTED_MODULE_1__["default"])(this[i]).click(e => {
       e.preventDefault();
       Object(_core__WEBPACK_IMPORTED_MODULE_1__["default"])(target).fadeIn(500);
+      Object(_core__WEBPACK_IMPORTED_MODULE_1__["default"])(target)[0] ? Object(_core__WEBPACK_IMPORTED_MODULE_1__["default"])(target)[0].style.paddingLeft = '' : '';
+      document.body.style.marginRight = scrollWidth + 'px';
       document.body.style.overflow = 'hidden';
     });
-  }
+    const closeElements = document.querySelectorAll(`${target} [data-close]`);
+    closeElements.forEach(el => {
+      Object(_core__WEBPACK_IMPORTED_MODULE_1__["default"])(el).click(() => {
+        Object(_core__WEBPACK_IMPORTED_MODULE_1__["default"])(target).fadeOut(500);
+        Object(_core__WEBPACK_IMPORTED_MODULE_1__["default"])(target)[0].style.paddingLeft = `${scrollWidth}px`;
+        document.body.style.marginRight = '';
+        document.body.style.overflow = '';
 
-  const closeElements = document.querySelectorAll('[data-close]');
-  closeElements.forEach(el => {
-    Object(_core__WEBPACK_IMPORTED_MODULE_1__["default"])(el).click(() => {
-      Object(_core__WEBPACK_IMPORTED_MODULE_1__["default"])('.modal').fadeOut(500);
-      document.body.style.overflow = '';
+        if (createdByScript) {
+          document.querySelector(target).remove();
+        }
+      });
     });
-  });
-  Object(_core__WEBPACK_IMPORTED_MODULE_1__["default"])('.modal').click(e => {
-    if (e.target.classList.contains('modal')) {
-      Object(_core__WEBPACK_IMPORTED_MODULE_1__["default"])('.modal').fadeOut(500);
-      document.body.style.overflow = '';
-    }
-  });
+    Object(_core__WEBPACK_IMPORTED_MODULE_1__["default"])(target).click(e => {
+      if (e.target.classList.contains('modal')) {
+        Object(_core__WEBPACK_IMPORTED_MODULE_1__["default"])(target).fadeOut(500);
+        Object(_core__WEBPACK_IMPORTED_MODULE_1__["default"])(target)[0].style.paddingLeft = `${scrollWidth}px`;
+        document.body.style.marginRight = '';
+        document.body.style.overflow = '';
+
+        if (createdByScript) {
+          document.querySelector(target).remove();
+        }
+      }
+    });
+  }
 };
 
 Object(_core__WEBPACK_IMPORTED_MODULE_1__["default"])('[data-toggle="modal"]').modal();
@@ -1979,10 +2032,45 @@ _core__WEBPACK_IMPORTED_MODULE_1__["default"].prototype.createModal = function (
         `;
     modal.querySelector('.modal-footer').append(...buttons);
     document.body.append(modal);
-    Object(_core__WEBPACK_IMPORTED_MODULE_1__["default"])(this[i]).modal();
+    Object(_core__WEBPACK_IMPORTED_MODULE_1__["default"])(this[i]).modal(true);
     Object(_core__WEBPACK_IMPORTED_MODULE_1__["default"])(this[i].getAttribute('data-target')).fadeIn(500);
   }
 };
+
+function calcScrollWidth() {
+  let div = document.createElement('div');
+  div.style.overflowY = 'scroll';
+  div.style.width = '50px';
+  div.style.height = '50px';
+  document.body.append(div);
+  let scrollWidth = div.offsetWidth - div.clientWidth;
+  div.remove();
+  return scrollWidth;
+}
+
+/***/ }),
+
+/***/ "./src/js/lib/components/tab.js":
+/*!**************************************!*\
+  !*** ./src/js/lib/components/tab.js ***!
+  \**************************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../core */ "./src/js/lib/core.js");
+
+
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.tab = function () {
+  for (let i = 0; i < this.length; i++) {
+    Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])(this[i]).on('click', () => {
+      Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])(this[i]).addClass('tab-item--active').siblings().removeClass('tab-item--active').closest('.tab').find('.tab-content').removeClass('tab-content--active').eq(Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])(this[i]).index()).addClass('tab-content--active');
+    });
+  }
+};
+
+Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])('[data-tabpanel] .tab-item').tab();
 
 /***/ }),
 
@@ -2059,6 +2147,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_effects__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/effects */ "./src/js/lib/modules/effects.js");
 /* harmony import */ var _components_dropdown__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/dropdown */ "./src/js/lib/components/dropdown.js");
 /* harmony import */ var _components_modal__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/modal */ "./src/js/lib/components/modal.js");
+/* harmony import */ var _components_tab__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/tab */ "./src/js/lib/components/tab.js");
+/* harmony import */ var _components_accordion__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./components/accordion */ "./src/js/lib/components/accordion.js");
+
+
 
 
 
@@ -2536,30 +2628,30 @@ Object(_lib_lib__WEBPACK_IMPORTED_MODULE_0__["default"])('button').eq(2).click((
   Object(_lib_lib__WEBPACK_IMPORTED_MODULE_0__["default"])('.w-500').fadeToggle(800);
 });
 Object(_lib_lib__WEBPACK_IMPORTED_MODULE_0__["default"])('.btn-dark').attr('data-id', '7');
-console.log(Object(_lib_lib__WEBPACK_IMPORTED_MODULE_0__["default"])('.btn-dark').attr('data-id'));
-Object(_lib_lib__WEBPACK_IMPORTED_MODULE_0__["default"])('.wrap').html(`
-        <div class="dropdown">
-            <button class="btn btn-primary dropdown-toggle" id="dropdownMenuButton">Dropdown button</button>
-            <div class="dropdown-menu" data-toggle-id="dropdownMenuButton">
-                <a href="#" class="dropdown-item">Action</a>
-                <a href="#" class="dropdown-item">Action #2</a>
-                <a href="#" class="dropdown-item">Action #3</a>
-            </div>
+Object(_lib_lib__WEBPACK_IMPORTED_MODULE_0__["default"])('.wrap').html(`<div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" id="dropdownMenuButton">Dropdown button</button>
+        <div class="dropdown-menu" data-toggle-id="dropdownMenuButton">
+            <a href="#" class="dropdown-item">Action</a>
+            <a href="#" class="dropdown-item">Action #2</a>
+            <a href="#" class="dropdown-item">Action #3</a>
         </div>
-    `);
-Object(_lib_lib__WEBPACK_IMPORTED_MODULE_0__["default"])('.dropdown-toggle').dropdown();
+    </div>`);
+Object(_lib_lib__WEBPACK_IMPORTED_MODULE_0__["default"])('.dropdown-toggle').eq(0).dropdown();
 Object(_lib_lib__WEBPACK_IMPORTED_MODULE_0__["default"])('#trigger').click(() => Object(_lib_lib__WEBPACK_IMPORTED_MODULE_0__["default"])('#trigger').createModal({
   text: {
-    title: 'Modal title',
+    title: 'Modal title #1',
     body: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Cupiditate sit est nostrum nihil earum aperiam? Vitae sunt dicta, delectus quasi perspiciatis modi eius autem a qui architecto incidunt eum repudiandae!'
   },
   btns: {
-    count: 2,
+    count: 3,
     settings: [['Close', ['btn-danger', 'mr-10'], true], ['Save changes', ['btn-success'], false, () => {
       alert('Данные сохранены');
+    }], ['Another btn', ['btn-warning', 'ml-10'], false, () => {
+      alert('Hello World');
     }]]
   }
 }));
+console.log(Object(_lib_lib__WEBPACK_IMPORTED_MODULE_0__["default"])('.accordion-head'));
 
 /***/ })
 

@@ -1,31 +1,51 @@
 import $ from '../core';
 
-$.prototype.modal = function() {
+const scrollWidth = calcScrollWidth();
+
+$.prototype.modal = function(createdByScript) {
     for (let i = 0; i < this.length; i++) {
         const target = $(this[i]).attr('data-target');
         $(this[i]).click((e) => {
             e.preventDefault();
             $(target).fadeIn(500);
+            $(target)[0] ? $(target)[0].style.paddingLeft = '' : '';
+            document.body.style.marginRight =  scrollWidth + 'px';
             document.body.style.overflow = 'hidden';
         });
-    }
-    const closeElements = document.querySelectorAll('[data-close]');
 
-    closeElements.forEach(el => {
-        $(el).click(() => {
-            $('.modal').fadeOut(500);
-            document.body.style.overflow = '';
+        const closeElements = document.querySelectorAll(`${target} [data-close]`);
+
+        closeElements.forEach(el => {
+            $(el).click(() => {
+                $(target).fadeOut(500);
+                $(target)[0].style.paddingLeft = `${scrollWidth}px`;
+                document.body.style.marginRight = '';
+                document.body.style.overflow = '';
+                if (createdByScript) {
+                    document.querySelector(target).remove();
+                }
+            });
         });
-    });
-    $('.modal').click(e => {
-        if (e.target.classList.contains('modal')) {
-            $('.modal').fadeOut(500);
-            document.body.style.overflow = '';
-        }
-    });
+        $(target).click(e => {
+            if (e.target.classList.contains('modal')) {
+                $(target).fadeOut(500);
+                $(target)[0].style.paddingLeft = `${scrollWidth}px`;
+                document.body.style.marginRight = '';
+                document.body.style.overflow = '';
+                if (createdByScript) {
+                    document.querySelector(target).remove();
+                }
+            }
+
+        });
+    }
+    
+
 };
 
 $('[data-toggle="modal"]').modal();
+
+
 
 $.prototype.createModal = function({text, btns} = {}) {
     for (let i = 0; i < this.length; i++) {
@@ -67,7 +87,21 @@ $.prototype.createModal = function({text, btns} = {}) {
 
         modal.querySelector('.modal-footer').append(...buttons)
         document.body.append(modal);
-        $(this[i]).modal();
+        $(this[i]).modal(true);
         $(this[i].getAttribute('data-target')).fadeIn(500);
     }
 };
+
+
+function calcScrollWidth() {
+    let div = document.createElement('div');
+
+    div.style.overflowY = 'scroll';
+    div.style.width = '50px';
+    div.style.height = '50px';
+
+    document.body.append(div);
+    let scrollWidth = div.offsetWidth - div.clientWidth;
+    div.remove();
+    return scrollWidth;
+}
