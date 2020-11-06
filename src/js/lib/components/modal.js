@@ -93,6 +93,9 @@ $.prototype.createModal = function({text, btns} = {}) {
 };
 
 
+
+
+
 function calcScrollWidth() {
     let div = document.createElement('div');
 
