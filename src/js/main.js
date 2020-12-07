@@ -1,4 +1,3 @@
-import './lib/lib';
 import $ from './lib/lib';
 
 $('#first').on('click', () => {
@@ -73,3 +72,6 @@ $('.carousel').createCarousel({
         "https://i.redd.it/zska1gzn0ip11.jpg"
     ]
 });
+
+$().get('https://jsonplaceholder.typicode.com/todos')
+    .then(res => console.log(res));

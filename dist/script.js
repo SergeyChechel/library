@@ -2868,6 +2868,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_tab__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/tab */ "./src/js/lib/components/tab.js");
 /* harmony import */ var _components_accordion__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./components/accordion */ "./src/js/lib/components/accordion.js");
 /* harmony import */ var _components_carousel__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./components/carousel */ "./src/js/lib/components/carousel.js");
+/* harmony import */ var _services_requests__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./services/requests */ "./src/js/lib/services/requests.js");
+
 
 
 
@@ -2938,10 +2940,10 @@ _core__WEBPACK_IMPORTED_MODULE_1__["default"].prototype.index = function () {
 _core__WEBPACK_IMPORTED_MODULE_1__["default"].prototype.find = function (selector) {
   let numberOfItems = 0;
   let counter = 0;
-  const coryObj = Object.assign({}, this);
+  const copyObj = Object.assign({}, this);
 
-  for (let i = 0; i < coryObj.length; i++) {
-    const arr = coryObj[i].querySelectorAll(selector);
+  for (let i = 0; i < copyObj.length; i++) {
+    const arr = copyObj[i].querySelectorAll(selector);
 
     if (arr.length == 0) {
       continue;
@@ -3326,6 +3328,58 @@ _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.click = function (handle
 
 /***/ }),
 
+/***/ "./src/js/lib/services/requests.js":
+/*!*****************************************!*\
+  !*** ./src/js/lib/services/requests.js ***!
+  \*****************************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../core */ "./src/js/lib/core.js");
+
+
+
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.get = async function (url, dataTypeAnswer = 'json') {
+  let res = await fetch(url);
+
+  if (!res.ok) {
+    throw new Error(`Could not fetch ${url}, status: ${res.status}`);
+  }
+
+  switch (dataTypeAnswer) {
+    case 'json':
+      return await res.json();
+
+    case 'text':
+      return await res.text();
+
+    case 'blob':
+      return await res.blob();
+  }
+};
+
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.post = async function (url, data, dataTypeAnswer = 'text') {
+  let res = await fetch(url, {
+    method: 'POST',
+    body: data
+  });
+
+  switch (dataTypeAnswer) {
+    case 'json':
+      return await res.json();
+
+    case 'text':
+      return await res.text();
+
+    case 'blob':
+      return await res.blob();
+  }
+};
+
+/***/ }),
+
 /***/ "./src/js/main.js":
 /*!************************!*\
   !*** ./src/js/main.js ***!
@@ -3336,7 +3390,6 @@ _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.click = function (handle
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _lib_lib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./lib/lib */ "./src/js/lib/lib.js");
-
 
 Object(_lib_lib__WEBPACK_IMPORTED_MODULE_0__["default"])('#first').on('click', () => {
   Object(_lib_lib__WEBPACK_IMPORTED_MODULE_0__["default"])('div').eq(1).fadeToggle(800);
@@ -3374,6 +3427,7 @@ Object(_lib_lib__WEBPACK_IMPORTED_MODULE_0__["default"])('#trigger').click(() =>
 Object(_lib_lib__WEBPACK_IMPORTED_MODULE_0__["default"])('.carousel').createCarousel({
   imgs: ["https://www.pandasecurity.com/en/mediacenter/src/uploads/2013/11/pandasecurity-facebook-photo-privacy.jpg", "https://api.time.com/wp-content/uploads/2019/08/better-smartphone-photos.jpg", "https://iso.500px.com/wp-content/uploads/2016/11/stock-photo-159533631-1500x1000.jpg", "https://i.redd.it/zska1gzn0ip11.jpg"]
 });
+Object(_lib_lib__WEBPACK_IMPORTED_MODULE_0__["default"])().get('https://jsonplaceholder.typicode.com/todos').then(res => console.log(res));
 
 /***/ })
 

@@ -7,7 +7,6 @@ $.prototype.animateOverTime = function(dur, cb, fin) {
         if (!timeStart) {
             timeStart = time;
         }
-
         let timeElapsed = time - timeStart;
         let completion = Math.min(timeElapsed / dur, 1);
 
@@ -21,7 +20,6 @@ $.prototype.animateOverTime = function(dur, cb, fin) {
             }
         }
     }
-
     return _animateOverTime;
 };
 
@@ -63,7 +61,7 @@ function runInAnimation (el, obj, dur, display, fin) {
 }
 
 function runOutAnimation (el, obj, dur, fin) {
-
+    
     const _fadeOut = completion => {
         el.style.opacity = 1 - completion;
         if (completion === 1) {

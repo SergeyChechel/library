@@ -27,7 +27,6 @@ $.prototype.click = function(handler) {
         } else {
             this[i].click();
         }
-        
     }
     return this;
 };
