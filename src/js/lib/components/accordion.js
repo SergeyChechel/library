@@ -26,3 +26,4 @@ $.prototype.accordion = function(headActiveClass = 'accordion-head--active', con
 
 
 $('.accordion-head').accordion();
+

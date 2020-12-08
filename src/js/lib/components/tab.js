@@ -12,4 +12,5 @@ $.prototype.tab = function() {
     }
 };
 
+
 $('[data-tabpanel] .tab-item').tab();

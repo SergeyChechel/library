@@ -5,6 +5,7 @@ const scrollWidth = calcScrollWidth();
 $.prototype.modal = function(createdByScript) {
     for (let i = 0; i < this.length; i++) {
         const target = $(this[i]).attr('data-target');
+
         $(this[i]).click((e) => {
             e.preventDefault();
             $(target).fadeIn(500);
@@ -14,7 +15,7 @@ $.prototype.modal = function(createdByScript) {
         });
 
         const closeElements = document.querySelectorAll(`${target} [data-close]`);
-
+        
         closeElements.forEach(el => {
             $(el).click(() => {
                 $(target).fadeOut(500);
@@ -26,6 +27,7 @@ $.prototype.modal = function(createdByScript) {
                 }
             });
         });
+        
         $(target).click(e => {
             if (e.target.classList.contains('modal')) {
                 $(target).fadeOut(500);
@@ -39,8 +41,6 @@ $.prototype.modal = function(createdByScript) {
 
         });
     }
-    
-
 };
 
 $('[data-toggle="modal"]').modal();
@@ -51,10 +51,12 @@ $.prototype.createModal = function({text, btns} = {}) {
     for (let i = 0; i < this.length; i++) {
         let modal = document.createElement('div');
         modal.classList.add('modal');
+        // console.log(this[i].getAttribute('data-target').slice(1));
         modal.setAttribute('id', this[i].getAttribute('data-target').slice(1));
         
         // btns = {count: num, settings: [[text, classNames: [], close, cb]]}
         const buttons = [];
+
         for (let j = 0; j < btns.count; j++) {
             let btn = document.createElement('button');
             btn.classList.add('btn', ...btns.settings[j][1]);
@@ -78,15 +80,14 @@ $.prototype.createModal = function({text, btns} = {}) {
                         <div class="modal-title">${text.title}</div>
                     </div>
                     <div class="modal-body">${text.body}</div>
-                    <div class="modal-footer">
-
-                    </div>
+                    <div class="modal-footer"></div>
                 </div>
             </div>
         `;
 
         modal.querySelector('.modal-footer').append(...buttons)
         document.body.append(modal);
+
         $(this[i]).modal(true);
         $(this[i].getAttribute('data-target')).fadeIn(500);
     }
