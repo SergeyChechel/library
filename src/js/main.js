@@ -70,14 +70,14 @@ $('#trigger').click(() => $('#trigger').createModal({
 
 
 
-// $('.carousel').createCarousel({
-//     imgs: [
-//         "https://www.pandasecurity.com/en/mediacenter/src/uploads/2013/11/pandasecurity-facebook-photo-privacy.jpg",
-//         "https://api.time.com/wp-content/uploads/2019/08/better-smartphone-photos.jpg",
-//         "https://iso.500px.com/wp-content/uploads/2016/11/stock-photo-159533631-1500x1000.jpg",
-//         "https://i.redd.it/zska1gzn0ip11.jpg"
-//     ]
-// });
+$('.carousel').createCarousel({
+    imgs: [
+        "https://www.pandasecurity.com/en/mediacenter/src/uploads/2013/11/pandasecurity-facebook-photo-privacy.jpg",
+        "https://api.time.com/wp-content/uploads/2019/08/better-smartphone-photos.jpg",
+        "https://iso.500px.com/wp-content/uploads/2016/11/stock-photo-159533631-1500x1000.jpg",
+        "https://i.redd.it/zska1gzn0ip11.jpg"
+    ]
+});
 
 // $().get('https://jsonplaceholder.typicode.com/todos')
 //     .then(res => console.log(res));
